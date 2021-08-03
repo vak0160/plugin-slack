@@ -136,13 +136,13 @@ class Slack extends Base implements NotificationInterface
         {
             if ($eventData['task']['description'] != '')
             {
-                $message .= "\n✏️ ".'*"'.htmlspecialchars($eventData['task']['description'], ENT_NOQUOTES | ENT_IGNORE).'"*';
+                $message .= "\n✏️ \n```\n".htmlspecialchars($eventData['task']['description'], ENT_NOQUOTES | ENT_IGNORE)."\n```";
             }
         }
         
         elseif (in_array($eventName, $comment_events))  // If comment available
         {
-            $message .= "\n💬 ".'*"'.$eventData['comment']['comment'].'"*';
+            $message .= "\n💬 \n```\n".$eventData['comment']['comment']."\n```";
         }
         
         elseif ($eventName === TaskFileModel::EVENT_CREATE and $forward_attachments)  // If attachment available
@@ -157,9 +157,9 @@ class Slack extends Base implements NotificationInterface
         }
 
         return array(
+            'username' => 'Talenta Project Management',
+            // 'icon_url' => 'https://raw.githubusercontent.com/kanboard/kanboard/master/assets/img/favicon.png',
             'text' => $message,
-            'username' => 'Kanboard',
-            'icon_url' => 'https://raw.githubusercontent.com/kanboard/kanboard/master/assets/img/favicon.png',
             'attachments' => $attachment
         );
     }
