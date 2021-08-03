@@ -142,7 +142,7 @@ class Slack extends Base implements NotificationInterface
         
         elseif (in_array($eventName, $comment_events))  // If comment available
         {
-            $message .= "\n💬 ".'*"'.htmlspecialchars($eventData['comment']['comment'], ENT_NOQUOTES | ENT_IGNORE).'"*';
+            $message .= "\n💬 ".'*"'.$eventData['comment']['comment'].'"*';
         }
         
         elseif ($eventName === TaskFileModel::EVENT_CREATE and $forward_attachments)  // If attachment available
