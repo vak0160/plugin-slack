@@ -6,6 +6,9 @@
     <?= $this->form->label(t('Channel/Group/User (Optional)'), 'slack_webhook_channel') ?>
     <?= $this->form->text('slack_webhook_channel', $values, array(), array('placeholder="@username"')) ?>
 
+    <?= $this->form->label(t('Mention ID'), 'slack_webhook_mention_id') ?>
+    <?= $this->form->text('slack_webhook_mention_id', $values, array(), array('placeholder="1234567890"')) ?>
+
     <p class="form-help"><a href="https://github.com/kanboard/plugin-slack#configuration" target="_blank"><?= t('Help on Slack integration') ?></a></p>
 
     <div class="form-actions">
