@@ -1,10 +1,12 @@
 <h3><i class="fa fa-slack fa-fw"></i>Slack</h3>
 <div class="panel">
+    <!--
     <?= $this->form->label(t('Webhook URL'), 'slack_webhook_url') ?>
     <?= $this->form->text('slack_webhook_url', $values) ?>
+    -->
 
-    <?= $this->form->label(t('Channel/Group/User (Optional)'), 'slack_webhook_channel') ?>
-    <?= $this->form->text('slack_webhook_channel', $values, array(), array('placeholder="@username"')) ?>
+    <?= $this->form->label(t('User (Optional)'), 'slack_webhook_channel') ?>
+    <?= $this->form->text('slack_webhook_channel', $values, array(), array('placeholder="username"')) ?>
 
     <?= $this->form->label(t('Mention ID'), 'slack_webhook_mention_id') ?>
     <?= $this->form->text('slack_webhook_mention_id', $values, array(), array('placeholder="1234567890"')) ?>
