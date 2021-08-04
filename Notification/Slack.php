@@ -63,6 +63,28 @@ class Slack extends Base implements NotificationInterface
     }
 
     /**
+     * Mention replacement
+     * 
+     * @access  private
+     * @param   string  $message
+     * @return  string
+     */
+    private function mentionReplace($message)
+    {
+        $result = $message;
+        $users = $this->userModel->getAll();
+        foreach($users as $user) {
+            $channel = $this->userMetadataModel->get($user['id'], 'slack_webhook_channel');
+            $mention_id = $this->userMetadataModel->get($user['id'], 'slack_webhook_mention_id');
+            if (!empty($channel) && !empty($mention_id)) {
+                $result = str_replace("@".$user["username"], "<@!".$mention_id.">", $result);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Get message to send
      *
      * @access public
@@ -136,23 +158,15 @@ class Slack extends Base implements NotificationInterface
         {
             if ($eventData['task']['description'] != '')
             {
-                $message .= "\n✏️ \n```\n".htmlspecialchars($eventData['task']['description'], ENT_NOQUOTES | ENT_IGNORE)."\n```";
+                $description = $this->mentionReplace($eventData['task']['description']);
+                $message .= "\n✏️\n".$description."";
             }
         }
         
         elseif (in_array($eventName, $comment_events))  // If comment available
         {
-            $comment = $eventData['comment']['comment'];
-            $users = $this->userModel->getAll();
-            foreach($users as $user) {
-                $channel = $this->userMetadataModel->get($user['id'], 'slack_webhook_channel');
-                $mention_id = $this->userMetadataModel->get($user['id'], 'slack_webhook_mention_id');
-                if (!empty($channel) && !empty($mention_id)) {
-                    $comment = str_replace("@".$user["username"], "<@!".$mention_id.">", $comment);
-                }
-            }
-
-            $message .= "\n💬 \n".$comment."";
+            $comment = $this->mentionReplace($eventData['comment']['comment']);
+            $message .= "\n💬\n".$comment."";
         }
         
         elseif ($eventName === TaskFileModel::EVENT_CREATE and $forward_attachments)  // If attachment available
